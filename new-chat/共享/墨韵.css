@@ -1,0 +1,206 @@
+@charset "UTF-8";
+/* ============================================================================
+   剑影江湖 · 共享视觉层（墨韵.css）
+   ----------------------------------------------------------------------------
+   五页共用：夜色 / 明月 / 远山 / 竹影 / 云雾 / 水墨 / 颗粒 / 暗角 / 电影黑边
+   通用组件：印章 / 金箔按钮 / 提示 / 幕标题 / 黑场 / 镜头震动
+   这套样式由「共享/墨韵.js」自动注入对应 DOM，页面本身不用写这些 div。
+   ============================================================================ */
+
+:root{
+  /* 夜色 */
+  --ink:#04050a;
+  --sky-1:#20273c;
+  --sky-2:#0d1119;
+  --sky-3:#06070c;
+  /* 鎏金 */
+  --gold:#e8c887;
+  --gold-hi:#fff3cf;
+  --gold-deep:#a97c26;
+  /* 朱砂 */
+  --cin:#b23a2f;
+  --cin-deep:#93261a;
+  /* 宣纸 */
+  --paper-1:#fdf8ea;
+  --paper-2:#f0e6cf;
+  --paper-3:#e2d2b2;
+  --paper-ink:#241d13;
+  /* 字体：楷体优先，退到宋体 */
+  --font-cn:"STKaiti","KaiTi","Kaiti SC","STSong","SimSun","Songti SC","Noto Serif CJK SC","Noto Serif SC",serif;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;overflow:hidden;background:var(--ink);color:#e9dfc8;
+  font-family:var(--font-cn);font-size:16px;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  user-select:none;-webkit-tap-highlight-color:transparent;
+}
+canvas{display:block}
+button{font-family:var(--font-cn)}
+img{max-width:100%}
+
+/* ============================ 背景层 ============================ */
+#bg{position:fixed;inset:0;z-index:0;
+  background:
+    radial-gradient(120% 85% at 78% -12%, var(--sky-1) 0%, var(--sky-2) 42%, var(--sky-3) 100%),
+    linear-gradient(180deg,#0a0c14,#05060a);
+}
+#bg::after{content:"";position:absolute;inset:0;
+  background:radial-gradient(70% 45% at 76% 14%, rgba(255,225,160,.10), transparent 70%);
+  animation:inkBreathe 9s ease-in-out infinite}
+
+#moon{position:fixed;z-index:1;width:clamp(120px,17vh,210px);aspect-ratio:1;border-radius:50%;
+  right:11%;top:7%;
+  background:radial-gradient(circle at 36% 32%, #fffdf4, #f6e9c2 42%, #ddc78e 68%, #b09a63 100%);
+  box-shadow:0 0 50px 14px rgba(255,238,190,.22), 0 0 150px 62px rgba(255,214,130,.13),
+             inset -14px -10px 30px rgba(120,95,50,.35);
+  animation:inkMoonRise 3.4s cubic-bezier(.2,.8,.25,1) both;
+}
+#moon.save{right:14%;top:5%;width:clamp(96px,13vh,168px)}
+#halo{position:fixed;z-index:1;width:clamp(220px,32vh,380px);aspect-ratio:1;border-radius:50%;
+  right:6%;top:1%;pointer-events:none;filter:blur(14px);
+  background:radial-gradient(circle, rgba(255,224,150,.20), rgba(255,200,110,.06) 45%, transparent 70%);
+  animation:inkBreathe 7s ease-in-out infinite}
+#halo.save{right:9%;top:-1%}
+
+@keyframes inkBreathe{0%,100%{opacity:.75}50%{opacity:1}}
+@keyframes inkMoonRise{from{opacity:0;transform:translateY(46px) scale(.86)}to{opacity:.94;transform:none}}
+
+/* 远山（三层 clip-path） */
+.mt{position:fixed;left:-6%;right:-6%;bottom:0;z-index:2;pointer-events:none}
+.mt.far{height:42vh;background:#131a2b;opacity:.85;
+  clip-path:polygon(0 100%,0 62%,8% 46%,15% 60%,24% 36%,33% 58%,42% 42%,52% 64%,61% 38%,70% 58%,79% 44%,88% 62%,96% 48%,100% 60%,100% 100%)}
+.mt.mid{height:32vh;background:#0a0e18;opacity:.95;
+  clip-path:polygon(0 100%,0 74%,10% 56%,20% 72%,30% 52%,41% 70%,53% 54%,64% 72%,74% 56%,85% 74%,94% 60%,100% 72%,100% 100%)}
+.mt.near{height:22vh;background:#04060b;
+  clip-path:polygon(0 100%,0 86%,12% 72%,26% 86%,38% 74%,52% 88%,66% 76%,80% 88%,92% 78%,100% 88%,100% 100%)}
+
+/* 竹影 */
+#bamboo{position:fixed;inset:0;z-index:3;pointer-events:none;opacity:.9;width:100%;height:100%}
+
+/* 粒子层 */
+#fx{position:fixed;inset:0;z-index:4;pointer-events:none;width:100%;height:100%}
+
+/* 云雾 */
+#mist{position:fixed;left:-25%;right:-25%;height:28vh;bottom:4vh;z-index:5;pointer-events:none;
+  background:linear-gradient(90deg,transparent,rgba(150,178,220,.10) 22%,rgba(190,210,245,.17) 50%,rgba(150,178,220,.09) 78%,transparent);
+  filter:blur(20px);animation:inkMist 46s ease-in-out infinite alternate}
+@keyframes inkMist{from{transform:translateX(-11%)}to{transform:translateX(11%)}}
+
+/* 水墨晕染 */
+#wash{position:fixed;inset:-12%;z-index:5;pointer-events:none;opacity:.62;filter:blur(7px);
+  background:
+    radial-gradient(46% 38% at 12% 88%, rgba(4,6,12,.96), transparent 72%),
+    radial-gradient(42% 34% at 90% 84%, rgba(4,6,12,.9), transparent 72%),
+    radial-gradient(38% 30% at 26% 16%, rgba(48,62,96,.22), transparent 72%),
+    radial-gradient(42% 32% at 74% 26%, rgba(70,56,40,.20), transparent 72%);
+  animation:inkWash 28s ease-in-out infinite alternate}
+@keyframes inkWash{from{transform:translate3d(-1.5%,-1%,0) scale(1.02)}to{transform:translate3d(1.5%,1%,0) scale(1.05)}}
+
+/* 暗角 */
+#vig{position:fixed;inset:0;z-index:7;pointer-events:none;
+  background:radial-gradient(125% 95% at 50% 46%, transparent 40%, rgba(0,0,0,.5) 76%, rgba(0,0,0,.92) 100%)}
+
+/* 宣纸颗粒 + 二次暗角 */
+#grain{position:fixed;inset:0;z-index:8;pointer-events:none;mix-blend-mode:multiply;
+  background:
+    radial-gradient(140% 108% at 50% 44%, transparent 48%, rgba(4,5,12,.34) 80%, rgba(2,3,8,.72) 100%),
+    repeating-linear-gradient(0deg, rgba(150,124,84,.045) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(90deg, rgba(150,124,84,.035) 0 1px, transparent 1px 4px)}
+
+/* 闪白 */
+#inkflash{position:fixed;inset:0;z-index:11;pointer-events:none;background:#fff;opacity:0}
+
+/* 电影黑边 */
+#cine{position:fixed;inset:0;z-index:13;pointer-events:none;opacity:0;
+  transition:opacity 1.05s cubic-bezier(.2,.8,.25,1)}
+#cine.on{opacity:1}
+#cine i{position:absolute;left:0;right:0;display:block;height:9vh;background:#000}
+#cine i.t{top:0}
+#cine i.b{bottom:0}
+
+/* ============================ 通用组件 ============================ */
+
+/* 黑场幕布 */
+#curtain{position:fixed;inset:0;z-index:20;background:var(--ink);transition:opacity 1.15s ease}
+#curtain.off{opacity:0;pointer-events:none}
+
+/* 印章 */
+.seal-cn{
+  display:grid;place-items:center;padding:5%;
+  border:2px solid var(--cin);border-radius:5px;color:var(--cin);
+  font-weight:700;line-height:1;letter-spacing:0;mix-blend-mode:multiply;
+  box-shadow:inset 0 0 0 1px rgba(178,58,47,.35);
+}
+
+/* 金箔按钮 */
+.btn-gold{
+  font-size:13.5px;letter-spacing:.26em;text-indent:.26em;color:var(--gold);
+  background:rgba(18,16,12,.55);border:1px solid rgba(232,200,135,.42);border-radius:999px;
+  padding:11px 26px;cursor:pointer;backdrop-filter:blur(6px);
+  transition:background .3s,box-shadow .3s,transform .3s,color .3s;
+}
+.btn-gold:hover{background:rgba(232,200,135,.16);color:var(--gold-hi);
+  box-shadow:0 0 26px rgba(232,200,135,.42),inset 0 0 18px rgba(232,200,135,.14);
+  transform:translateY(-2px)}
+.btn-gold:active{transform:translateY(0) scale(.98)}
+
+/* 音效开关 */
+#inkSound{position:fixed;right:16px;top:16px;z-index:15;width:38px;height:38px;padding:0;
+  border-radius:50%;font-size:15px;letter-spacing:0;text-indent:0;line-height:1;
+  display:grid;place-items:center;opacity:0;transition:opacity .8s ease,background .3s,box-shadow .3s}
+#inkSound.on{opacity:.85}
+
+/* 左上返回 */
+#inkBack{position:fixed;left:16px;top:16px;z-index:15;padding:8px 16px;font-size:12.5px;
+  letter-spacing:.2em;text-indent:.2em;opacity:0;transition:opacity .8s ease}
+#inkBack.on{opacity:.72}
+
+/* 底部提示 */
+.hint-cn{position:fixed;left:0;right:0;bottom:1.3vh;z-index:15;text-align:center;pointer-events:none;
+  font-size:12px;letter-spacing:.3em;text-indent:.3em;color:rgba(232,200,135,.4);
+  opacity:0;transition:opacity 1s ease}
+.hint-cn.on{opacity:1;animation:inkHint 3.6s ease-in-out infinite}
+@keyframes inkHint{0%,100%{opacity:.42}50%{opacity:.9}}
+
+/* 幕标题 */
+.act{position:fixed;left:0;right:0;top:50%;z-index:14;text-align:center;pointer-events:none;
+  opacity:0;transform:translateY(-50%)}
+.act.on{animation:inkAct 4.6s cubic-bezier(.2,.8,.25,1) forwards}
+.act b{display:block;font-weight:400;font-size:clamp(24px,4.6vh,46px);
+  letter-spacing:.5em;text-indent:.5em;
+  background:linear-gradient(178deg,#fff6d2,#f0c465 40%,var(--gold-deep) 74%,#ffe7ab);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 0 26px rgba(255,214,130,.6))}
+.act i{display:block;margin-top:1.2em;font-style:normal;
+  font-size:clamp(11px,1.7vh,14px);letter-spacing:.44em;text-indent:.44em;
+  color:rgba(232,200,135,.62)}
+@keyframes inkAct{
+  0%{opacity:0;transform:translateY(calc(-50% + 16px))}
+  14%{opacity:1;transform:translateY(-50%)}
+  76%{opacity:1;transform:translateY(-50%)}
+  100%{opacity:0;transform:translateY(calc(-50% - 14px))}
+}
+
+/* 镜头震动 */
+.shake{animation:inkShake .6s cubic-bezier(.36,.07,.19,.97) both}
+@keyframes inkShake{
+  10%{transform:translate(-7px,3px)}20%{transform:translate(8px,-4px)}30%{transform:translate(-9px,2px)}
+  42%{transform:translate(7px,4px)}54%{transform:translate(-5px,-3px)}66%{transform:translate(5px,2px)}
+  78%{transform:translate(-3px,1px)}90%{transform:translate(2px,-2px)}100%{transform:none}}
+
+/* 通用显现 */
+@keyframes inkLineIn{to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes inkFadeIn{from{opacity:0}to{opacity:1}}
+
+/* ============================ 自适应 ============================ */
+@media (max-width:520px){
+  #moon{right:7%;top:4%;width:clamp(96px,14vh,150px)}
+  #halo{right:2%;top:-2%}
+  .act b{letter-spacing:.34em;text-indent:.34em}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
