@@ -1,0 +1,123 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>生辰信笺 · 剑影江湖</title>
+  <link rel="stylesheet" href="./3d旋转卡片.css">
+</head>
+<body>
+
+  <div id="bg"></div>
+  <div id="halo"></div>
+  <div id="moon"></div>
+
+  <div class="mt far"></div>
+  <div class="mt mid"></div>
+
+  <svg id="bamboo" viewBox="0 0 1280 800" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+    <defs>
+      <g id="stalk">
+        <rect x="-7" y="-40" width="14" height="880" rx="7" fill="#080d0b"/>
+        <rect x="-9" y="130" width="18" height="7" rx="3" fill="#0d1411"/>
+        <rect x="-9" y="300" width="18" height="7" rx="3" fill="#0d1411"/>
+        <rect x="-9" y="470" width="18" height="7" rx="3" fill="#0d1411"/>
+        <rect x="-9" y="640" width="18" height="7" rx="3" fill="#0d1411"/>
+      </g>
+      <g id="leafspray" fill="#080d0b">
+        <path d="M0 0 C 30 -20 70 -26 108 -14 C 68 8 30 14 0 0 Z"/>
+        <path d="M0 0 C 24 18 56 34 94 38 C 58 50 22 34 0 0 Z"/>
+        <path d="M0 0 C -28 -16 -66 -19 -102 -8 C -64 12 -28 12 0 0 Z"/>
+        <path d="M0 0 C -20 20 -48 38 -84 44 C -48 54 -18 34 0 0 Z"/>
+      </g>
+    </defs>
+    <g opacity=".95">
+      <use href="#stalk" transform="translate(46,0)"/>
+      <use href="#stalk" transform="translate(112,0)"/>
+      <use href="#stalk" transform="translate(1240,0)"/>
+      <use href="#stalk" transform="translate(1180,0)"/>
+      <use href="#leafspray" transform="translate(80,158) scale(1.15)"/>
+      <use href="#leafspray" transform="translate(80,158) rotate(26) scale(.9)"/>
+      <use href="#leafspray" transform="translate(1206,244) rotate(180) scale(1.1)"/>
+      <use href="#leafspray" transform="translate(1206,244) rotate(150) scale(.85)"/>
+    </g>
+  </svg>
+
+  <div class="mt near"></div>
+  <canvas id="fx"></canvas>
+  <div id="mist"></div>
+  <div id="wash"></div>
+  <div id="vig"></div>
+
+  <div class="lg">
+    <div class="beam"></div>
+    <div id="box">
+      <div class="card1 item">
+        <i class="rod top"></i>
+        <div class="ink"></div>
+        <div class="scroll-text">
+          <h3>往 昔</h3>
+          <p>世事浮沉，幸君踏月而来。<br>凡所过往，皆为序章。</p>
+        </div>
+        <div class="seal">往昔</div>
+        <i class="rod bottom"></i>
+      </div>
+      <div class="card2 item" id="it">
+        <i class="rod top"></i>
+        <div class="ink"></div>
+        <div class="scroll-text">
+          <h3>此 刻</h3>
+          <p>一岁一礼，一寸欢喜。<br>生辰快乐。</p>
+        </div>
+        <div class="seal">此刻</div>
+        <i class="rod bottom"></i>
+      </div>
+      <div class="card3 item">
+        <i class="rod top"></i>
+        <div class="ink"></div>
+        <div class="scroll-text">
+          <h3>来 日</h3>
+          <p>愿你遍历山河，<br>仍觉人间值得，岁岁长安。</p>
+        </div>
+        <div class="seal">来日</div>
+        <i class="rod bottom"></i>
+      </div>
+    </div>
+    <button class="btn prev-btn" aria-label="上一张">&lt;</button>
+    <button class="btn next-btn" aria-label="下一张">&gt;</button>
+  </div>
+
+  <div class="dots" id="dots"><i></i><i></i><i></i></div>
+  <button class="cont" id="cont">展 开 终 章 →</button>
+
+  <canvas id="canvas" width="400" height="400"></canvas>
+  <div class="hint" id="hint">轻点信笺 · 以心画愿</div>
+
+  <div id="wipe"></div>
+
+  <script src="./3d旋转卡片.js"></script>
+<script>
+/* 配置.js 覆盖：第三幕三张信笺的文字 */
+(function(){
+  function apply(){
+    try{
+      var S=window.SITE||{}, L=S.letters; if(!L) return;
+      var items=document.querySelectorAll('#box .item');
+      for(var i=0;i<items.length&&i<L.length;i++){
+        var h=items[i].querySelector('.scroll-text h3');
+        var p=items[i].querySelector('.scroll-text p');
+        var s=items[i].querySelector('.seal');
+        if(h&&L[i].title) h.textContent=L[i].title.split('').join(' ');
+        if(p&&L[i].body){
+          var parts=L[i].body.split('。').filter(function(x){return x.length;});
+          p.innerHTML=parts.map(function(x){return x+'。';}).join('<br>');
+        }
+        if(s&&L[i].title) s.textContent=L[i].title;
+      }
+    }catch(e){}
+  }
+  if(document.readyState==='complete') apply(); else window.addEventListener('load',apply);
+})();
+</script>
+</body>
+</html>
